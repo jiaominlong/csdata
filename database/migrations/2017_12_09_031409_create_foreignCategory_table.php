@@ -15,7 +15,10 @@ class CreateForeignCategoryTable extends Migration
     {
         Schema::create('foreignCategorys', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            $table->string('category');
+            $table->float('money', 12, 6);
+            $table->float('percent', 12, 8);
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

@@ -15,7 +15,10 @@ class CreateForeignRoute extends Migration
     {
         Schema::create('foreignRoutes', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            $table->string('route');
+            $table->float('money', 12, 6);
+            $table->float('percent', 12, 8);
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 
@@ -26,6 +29,6 @@ class CreateForeignRoute extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('foreignRoute');
+        Schema::dropIfExists('foreignRoutes');
     }
 }

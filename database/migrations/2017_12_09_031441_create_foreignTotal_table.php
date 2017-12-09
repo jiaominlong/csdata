@@ -15,7 +15,10 @@ class CreateForeignTotalTable extends Migration
     {
         Schema::create('foreignTotals', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            $table->string('month');
+            $table->float('money', 12, 6);
+            $table->integer('count');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 
@@ -26,6 +29,6 @@ class CreateForeignTotalTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('foreignTotal');
+        Schema::dropIfExists('foreignTotals');
     }
 }

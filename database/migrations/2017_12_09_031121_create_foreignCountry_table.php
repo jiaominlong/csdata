@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreateForeignCountryTable extends Migration
 {
@@ -15,7 +16,10 @@ class CreateForeignCountryTable extends Migration
     {
         Schema::create('foreignCountrys', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            $table->string('country');
+            $table->float('money', 12, 6);
+            $table->float('percent', 12, 8);
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 
@@ -26,6 +30,6 @@ class CreateForeignCountryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('foreigncountrys');
+        Schema::dropIfExists('foreignCountrys');
     }
 }

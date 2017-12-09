@@ -13,31 +13,31 @@ class ForeignTradeScreenController extends Controller
 
     public function totals(){
         // 品类出口分析   单位 （万美元）
-        $data = DB::select('select * from foreigntotals');
+        $data = DB::select('select month, money, count from foreigntotals ORDER BY `id` DESC LIMIT 12');
         return json_encode($data);
     }
 
     public function country(){
         // 抵运国家TOP5   单位 （万美元）
-        $data = DB::select('select * from foreigncountrys');
+        $data = DB::select('select country, money, percent from foreigncountrys ORDER BY money DESC LIMIT 5');
         return json_encode($data);
     }
 
     public function area(){
         // 抵运区域分析   单位 （万美元）
-        $data = DB::select('select * from foreignareas');
+        $data = DB::select('select area, money, percent from foreignareas ORDER BY money DESC LIMIT 5');
         return json_encode($data);
     }
 
     public function route(){
         // 一带一路出口分析   单位 （万美元）
-        $data = DB::select('select * from foreignroutes');
+        $data = DB::select('select route, money, percent from foreignroutes ORDER BY money DESC, id DESC LIMIT 6');
         return json_encode($data);
     }
 
     public function category(){
         // 品类出口分析   单位 （万美元）
-        $data = DB::select('select * from foreigncategorys');
+        $data = DB::select('select category, money, percent from foreigncategorys ORDER BY money DESC, id DESC LIMIT 7');
         return json_encode($data);
     }
 }

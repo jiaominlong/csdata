@@ -13,7 +13,7 @@ class ForeignTradeScreenController extends Controller
 
     public function totals(){
         // 品类出口分析   单位 （万美元）
-        $data = DB::select('select month, money, count from foreigntotals ORDER BY `id` DESC LIMIT 12');
+        $data = DB::select('select month, money, count from foreigntotals ORDER BY month DESC LIMIT 12');
         return json_encode($data);
     }
 
@@ -38,6 +38,18 @@ class ForeignTradeScreenController extends Controller
     public function category(){
         // 品类出口分析   单位 （万美元）
         $data = DB::select('select category, money, percent from foreigncategorys ORDER BY money DESC, id DESC LIMIT 7');
+        return json_encode($data);
+    }
+
+    public function csindex(){
+        // 男装常熟出口价格指数
+        $data = DB::select('select month, dingji, huanbi, tongbi FROM foreigncsindexs ORDER BY month DESC LIMIT 12');
+        return json_encode($data);
+    }
+
+    public function qgindex(){
+        // 男装全国出口价格指数
+        $data = DB::select('select month, dingji, huanbi, tongbi FROM foreignqgindexs ORDER BY month DESC LIMIT 12');
         return json_encode($data);
     }
 }

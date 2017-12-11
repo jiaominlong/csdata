@@ -21,3 +21,5 @@ Route::get('foreigntrade/country', 'ForeignTradeScreenController@country');
 Route::get('foreigntrade/area', 'ForeignTradeScreenController@area');
 Route::get('foreigntrade/route', 'ForeignTradeScreenController@route');
 Route::get('foreigntrade/category', 'ForeignTradeScreenController@category');
+Route::get('foreigntrade/csindex', 'ForeignTradeScreenController@csindex');
+Route::get('foreigntrade/qgindex', 'ForeignTradeScreenController@qgindex');

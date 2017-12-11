@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class ForeignTradeScreenController extends Controller
 {
     public function index(){
-        return "Hello, Wrold";
+        return "";
     }
 
     public function totals(){

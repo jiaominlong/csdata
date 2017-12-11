@@ -15,9 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('foreigntrade', 'ForeignTradeScreenController@index');
-Route::get('foreigntrade/totals', 'ForeignTradeScreenController@totals');
-Route::get('foreigntrade/country', 'ForeignTradeScreenController@country');
-Route::get('foreigntrade/area', 'ForeignTradeScreenController@area');
-Route::get('foreigntrade/route', 'ForeignTradeScreenController@route');
-Route::get('foreigntrade/category', 'ForeignTradeScreenController@category');
+Route::post('foreigntrade', 'ForeignTradeScreenController@index');
+Route::post('foreigntrade/totals', 'ForeignTradeScreenController@totals');
+Route::post('foreigntrade/country', 'ForeignTradeScreenController@country');
+Route::post('foreigntrade/area', 'ForeignTradeScreenController@area');
+Route::post('foreigntrade/route', 'ForeignTradeScreenController@route');
+Route::post('foreigntrade/category', 'ForeignTradeScreenController@category');

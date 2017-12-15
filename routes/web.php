@@ -27,16 +27,16 @@ Route::get('foreigntrade/qgindex', 'ForeignTradeScreenController@qgindex');
 
 
 //指数屏幕接口
-Route::get('index/neixiaoprice', 'indexScreenController@neixiaoprice');
-Route::get('index/neixiaopricetotalindex', 'indexScreenController@neixiaopricetotalindex');
-Route::get('index/neixiaobigcateindex', 'indexScreenController@neixiaobigcateindex');
-Route::get('index/manjingqiindex', 'indexScreenController@manjingqiindex');
-Route::get('index/manjingqiindexindu', 'indexScreenController@manjingqiindexindu');
-Route::get('index/manjingqiindexcate', 'indexScreenController@manjingqiindexcate');
-Route::get('index/marketcatesale', 'indexScreenController@marketcatesale');
-Route::get('index/onlinesale', 'indexScreenController@onlinesale');
-Route::get('index/onlinecate', 'indexScreenController@onlinecate');
-Route::get('index/onlinesaledata', 'indexScreenController@onlinesaledata');
+Route::get('index/neixiaoprice', 'IndexScreenController@neixiaoprice');
+Route::get('index/neixiaopricetotalindex', 'IndexScreenController@neixiaopricetotalindex');
+Route::get('index/neixiaobigcateindex', 'IndexScreenController@neixiaobigcateindex');
+Route::get('index/manjingqiindex', 'IndexScreenController@manjingqiindex');
+Route::get('index/manjingqiindexindu', 'IndexScreenController@manjingqiindexindu');
+Route::get('index/manjingqiindexcate', 'IndexScreenController@manjingqiindexcate');
+Route::get('index/marketcatesale', 'IndexScreenController@marketcatesale');
+Route::get('index/onlinesale', 'IndexScreenController@onlinesale');
+Route::get('index/onlinecate', 'IndexScreenController@onlinecate');
+Route::get('index/onlinesaledata', 'IndexScreenController@onlinesaledata');
 
 //主屏幕
 Route::get('middle/total', 'MiddleScreenController@total');

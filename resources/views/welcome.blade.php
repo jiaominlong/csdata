@@ -62,6 +62,16 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+            ul{
+                margin: 0 auto;
+            }
+            a{
+                color: #333;
+                text-decoration: none;
+            }
+            h1 {
+                color: #2ab27b;
+            }
         </style>
     </head>
     <body>

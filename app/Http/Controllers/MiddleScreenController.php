@@ -28,6 +28,7 @@ class MiddleScreenController extends Controller
         }
         foreach ($data as $item){
             $newitem = new \stdClass();
+                $newitem->月份 = $item->month;
                 if ($item->aaa == '高新开发区'){
                     $newitem->镇区 = '虞山镇+高新开发区';
                 } elseif ($item->aaa == '碧溪新区'){
@@ -64,13 +65,13 @@ FROM middlelogistics GROUP BY middlelogistics.area
 
     public function arrivelogistics (){
         // 银行资金流量
-        $data = DB::select('SELECT `month` AS \'月份\', `money` AS \'资金\' FROM middlebankdata ORDER BY `month` DESC LIMIT 12');
+        $data = DB::select('SELECT `month` AS \'月份\', city AS \'城市\', arriveweight AS \'发货重量（吨）\' FROM middlelogistics ORDER BY sendweight DESC LIMIT 5');
         return json_encode($data);
     }
 
     public function sendlogistics (){
         // 物流发货量top5
-        $data = DB::select('SELECT city, sendweight FROM middlelogistics ORDER BY sendweight DESC LIMIT 5');
+        $data = DB::select('SELECT `month` AS \'月份\', city AS \'城市\', sendweight AS \'发货重量（吨）\' FROM middlelogistics ORDER BY sendweight DESC LIMIT 5');
         return json_encode($data);
     }
 

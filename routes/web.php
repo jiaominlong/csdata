@@ -28,6 +28,7 @@ Route::get('foreigntrade/qgindex', 'ForeignTradeScreenController@qgindex');
 
 //指数屏幕接口
 Route::get('index/neixiaoprice', 'indexScreenController@neixiaoprice');
+Route::get('index/neixiaopricetotalindex', 'indexScreenController@neixiaopricetotalindex');
 Route::get('index/neixiaobigcateindex', 'indexScreenController@neixiaobigcateindex');
 Route::get('index/manjingqiindex', 'indexScreenController@manjingqiindex');
 Route::get('index/manjingqiindexindu', 'indexScreenController@manjingqiindexindu');
@@ -41,9 +42,8 @@ Route::get('index/onlinesaledata', 'indexScreenController@onlinesaledata');
 Route::get('middle/total', 'MiddleScreenController@total');
 Route::get('middle/marketcate', 'MiddleScreenController@marketcate');
 Route::get('middle/towndata', 'MiddleScreenController@towndata');
-
+Route::get('middle/bankdata', 'MiddleScreenController@bankdata');
 Route::get('middle/chinamap', 'MiddleScreenController@chinamap');
-
-
 Route::get('middle/sendlogistics', 'MiddleScreenController@sendlogistics');
 Route::get('middle/arrivelogistics', 'MiddleScreenController@arrivelogistics');
+Route::get('middle/marketsale', 'MiddleScreenController@marketsale');

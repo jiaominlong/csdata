@@ -65,23 +65,43 @@
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                    @endauth
-                </div>
-            @endif
+            <div>
+                <ul>
+                    <h1>外贸屏幕数据接口</h1>
+                    <li><a href="/foreigntrade/totals">出口金额报关单趋势</a></li>
+                    <li><a href="/foreigntrade/qgindex">男装全国出口价格指数</a></li>
+                    <li><a href="/foreigntrade/csindex">男装常熟出口价格指数</a></li>
+                    <li><a href="/foreigntrade/country">出口抵运国TOP5</a></li>
+                    <li><a href="/foreigntrade/area">抵运区域分析</a></li>
+                    <li><a href="/foreigntrade/category">各类商品出口占比</a></li>
+                    <li><a href="/foreigntrade/route">一带一路出口情况</a></li>
+                </ul>
 
-            <div class="content">
-                <div class="title m-b-md">
-                    常熟服装展示馆数据接入
-                </div>
+                <ul>
+                    <h1>中间屏幕数据接口</h1>
+                    <li><a href="/middle/total">数据汇总</a></li>
+                    <li><a href="/middle/marketcate">市场交易品类占比</a></li>
+                    <li><a href="/middle/towndata">乡镇热力图</a></li>
+                    <li><a href="/middle/bankdata">服装城银行资金流量</a></li>
+                    <li><a href="/middle/chinamap">客流、物流热力图</a></li>
+                    <li><a href="/middle/sendlogistics">物流发货量TOP5</a></li>
+                    <li><a href="/middle/arrivelogistics">物流到达量TOP5</a></li>
+                    <li><a href="/middle/marketsale">市场交易TOP20</a></li>
+                </ul>
+
+                <ul>
+                    <h1>指数屏幕数据接口</h1>
+                    <li><a href="/index/neixiaoprice">男装内销价格指数</a></li>
+                    <li><a href="/index/neixiaopricetotalindex">男装内销价格总指数走势</a></li>
+                    <li><a href="/index/neixiaobigcateindex">男装内销价格 大类定基指数走势</a></li>
+                    <li><a href="/index/manjingqiindex">男装景气指数</a></li>
+                    <li><a href="/index/manjingqiindexindu">男装行业景气指数走势</a></li>
+                    <li><a href="/index/manjingqiindexcate">男装分类景气指数走势</a></li>
+                    <li><a href="/index/marketcatesale">男装市场各大类销售占比</a></li>
+                    <li><a href="/index/onlinesaledata">男装淘宝、天猫销售数据</a></li>
+                    <li><a href="/index/onlinesale">市场总交易额曲线图</a></li>
+                    <li><a href="/index/onlinecate">男装淘宝、天猫各大类销售占比</a></li>
+                </ul>
             </div>
-        </div>
     </body>
 </html>

@@ -17,6 +17,15 @@ class IndexScreenController extends Controller
 
 
 
+//    排序函数
+    function newSort($arr) {
+        $flag = array();
+        foreach($arr as $v){
+            $flag[] = $v['sale_new'];
+        }
+        array_multisort($flag, SORT_DESC, $arr);
+        return $arr;
+    }
     //
     public function neixiaoprice(){
         // 男装内销价格指数 V2
@@ -107,7 +116,7 @@ class IndexScreenController extends Controller
             );
             array_push($data, $tempArr);
         }
-        return json_encode($data);
+        return json_encode($this->newSort($data));
     }
 
     public function onlinesale(){
@@ -130,7 +139,7 @@ class IndexScreenController extends Controller
             );
             array_push($data, $tempArr);
         }
-        return json_encode($data);
+        return json_encode($this->newSort($data));
     }
 
     public function onlinesaledata(){

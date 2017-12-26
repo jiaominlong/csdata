@@ -96,9 +96,17 @@ class IndexScreenController extends Controller
     public function marketcatesale(){
         // 市场大类销售占比
         $data = array();
-        $data1 = DB::select('SELECT `month`, `category`, `index` AS \'sale\' FROM marketcatesale WHERE `category` IN ('.self::MARKETCATEGORY.') AND month = '.self::THISYEAR.self::THISMONTH.' LIMIT 10');
-        $data2 = DB::select('SELECT `month`, `category`, `index` AS \'sale\' FROM marketcatesale WHERE `category` IN ('.self::MARKETCATEGORY.') AND month = '.self::LASTYEAR.self::THISMONTH.' LIMIT 10');
-        $data = array_merge($data1, $data2);
+        $data1 = DB::select('SELECT `month`, `category`, `index` AS \'sale\' FROM marketcatesale WHERE `category` IN ('.self::MARKETCATEGORY.') ORDER BY category DESC, `month` DESC');
+        for ($i=0; $i < count($data1)/2; $i++){
+            $offse = $i * 2;
+            $newArr = array_slice($data1, $offse, 2);
+            $tempArr = array(
+                'category'=>$newArr[0]->category,
+                'sale_new'=>$newArr[0]->sale,
+                'sale_old'=>$newArr[1]->sale,
+            );
+            array_push($data, $tempArr);
+        }
         return json_encode($data);
     }
 
@@ -111,15 +119,17 @@ class IndexScreenController extends Controller
     public function onlinecate(){
         // 淘宝天猫各大类销售占比 V2
         $data = array();
-        $data = DB::select('SELECT `month`, `category`, `sale` FROM indexonlinecate WHERE `month` LIKE \'%'.self::THISMONTH.'%\' ORDER BY `month` DESC');
-//        $data->{self::THISYEAR.self::THISMONTH} = array();
-//        $data->{self::LASTYEAR.self::THISMONTH} = array();
-//        $cateArr = DB::select('SELECT `category` FROM indexonlinecate WHERE `month` = '.self::THISYEAR.self::THISMONTH.' ORDER BY `category`');
-//        $data->{self::THISYEAR.self::THISMONTH} = DB::select('SELECT `month`, `category`, `sale` FROM indexonlinecate WHERE `month` = '.self::THISYEAR.self::THISMONTH.' ORDER BY `category`');
-//        foreach ($cateArr as $item){
-//            $sql = sprintf('SELECT `month`, `category`, `sale` FROM indexonlinecate WHERE `month` = '.self::LASTYEAR.self::THISMONTH.' AND `category` = \'%s\'', $item->category);
-//            array_push($data->{self::LASTYEAR.self::THISMONTH}, DB::select($sql)[0]);
-//        }
+        $data1 = DB::select('SELECT `month`, `category`, `sale` FROM indexonlinecate WHERE `month` LIKE \'%'.self::THISMONTH.'%\' ORDER BY `category` DESC, `month` DESC');
+        for ($i=0; $i < count($data1)/2; $i++){
+            $offse = $i * 2;
+            $newArr = array_slice($data1, $offse, 2);
+            $tempArr = array(
+                'category'=>$newArr[0]->category,
+                'sale_new'=>$newArr[0]->sale,
+                'sale_old'=>$newArr[1]->sale,
+            );
+            array_push($data, $tempArr);
+        }
         return json_encode($data);
     }
 

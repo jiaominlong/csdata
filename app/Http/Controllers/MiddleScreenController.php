@@ -11,7 +11,7 @@ class MiddleScreenController extends Controller
     const LASTMONTH = '201710';
     public function total (){
         // 数据汇总 V2
-        $data = DB::select('SELECT month, category, unit, `data` FROM middletotal ORDER BY `month` LIMIT 4');
+        $data = DB::select('SELECT month, category, unit, `data` FROM middletotal ORDER BY `month` LIMIT 5');
         return json_encode($data);
     }
 

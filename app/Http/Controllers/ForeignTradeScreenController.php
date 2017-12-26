@@ -32,7 +32,7 @@ class ForeignTradeScreenController extends Controller
 
     public function route(){
         // 一带一路出口分析   单位 （万美元）
-        $data = DB::select('select `month` route, money, percent from foreignroutes WHERE `month` = '.self::THISMONTH.' ORDER BY money DESC, id DESC LIMIT 6');
+        $data = DB::select('select `month`, route, money, percent from foreignroutes WHERE `month` = '.self::THISMONTH.' ORDER BY money DESC, id DESC LIMIT 6');
         return json_encode($data);
     }
 

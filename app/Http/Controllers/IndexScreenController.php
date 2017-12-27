@@ -111,6 +111,7 @@ class IndexScreenController extends Controller
             $newArr = array_slice($data1, $offse, 2);
             $tempArr = array(
                 'category'=>$newArr[0]->category,
+                'month'=>$newArr[0]->month,
                 'sale_new'=>$newArr[0]->sale,
                 'sale_old'=>$newArr[1]->sale,
             );
@@ -134,6 +135,7 @@ class IndexScreenController extends Controller
             $newArr = array_slice($data1, $offse, 2);
             $tempArr = array(
                 'category'=>$newArr[0]->category,
+                'month'=>$newArr[0]->month,
                 'sale_new'=>$newArr[0]->sale,
                 'sale_old'=>$newArr[1]->sale,
             );

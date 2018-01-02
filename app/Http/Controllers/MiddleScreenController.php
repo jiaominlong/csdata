@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\DB;
 
 class MiddleScreenController extends Controller
 {
-    const THISMONTH = '201712';
-    const LASTMONTH = '201711';
-    const WULIU = '201710';
+    const THISMONTH = '201712'; # 市场交易占比和市场交易额使用
+    const TOWNHOT = '201711';  # 乡镇热力图更新时间
+    const WULIU = '201710'; # 物流到货量、发货量更新时间
     public function total (){
         // 数据汇总 V2
         $data = DB::select('SELECT month, category, unit, `data` FROM middletotal ORDER BY `month` DESC LIMIT 5');
@@ -24,7 +24,7 @@ class MiddleScreenController extends Controller
 
     public function towndata (){
         // 乡镇热力图  V2
-        $data = DB::select('SELECT `month`, `town`, `outputadd`, outputsame, taxadd, taxsame, workeradd, workersame, poweradd, powersame FROM middletowndata WHERE MONTH = '.self::LASTMONTH.' ORDER BY `town` DESC');
+        $data = DB::select('SELECT `month`, `town`, `outputadd`, outputsame, taxadd, taxsame, workeradd, workersame, poweradd, powersame FROM middletowndata WHERE MONTH = '.self::TOWNHOT.' ORDER BY `town` DESC');
         $hotmapdata = array();
         function tongbi($add, $same){
             return ($add - $same) / $same;

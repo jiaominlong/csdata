@@ -7,11 +7,12 @@ use Illuminate\Support\Facades\DB;
 
 class MiddleScreenController extends Controller
 {
-    const THISMONTH = '201711';
-    const LASTMONTH = '201710';
+    const THISMONTH = '201712';
+    const LASTMONTH = '201711';
+    const WULIU = '201710';
     public function total (){
         // 数据汇总 V2
-        $data = DB::select('SELECT month, category, unit, `data` FROM middletotal ORDER BY `month` LIMIT 5');
+        $data = DB::select('SELECT month, category, unit, `data` FROM middletotal ORDER BY `month` DESC LIMIT 5');
         return json_encode($data);
     }
 
@@ -61,13 +62,13 @@ FROM middlelogistics GROUP BY middlelogistics.area ORDER BY middlelogistics.area
 
     public function arrivelogistics (){
         // 物流到货量
-        $data = DB::select('SELECT `month`, city, arriveweight FROM middlelogistics WHERE `month` = '.self::LASTMONTH.' ORDER BY arriveweight DESC LIMIT 5');
+        $data = DB::select('SELECT `month`, city, arriveweight FROM middlelogistics WHERE `month` = '.self::WULIU.' ORDER BY arriveweight DESC LIMIT 5');
         return json_encode($data);
     }
 
     public function sendlogistics (){
         // 物流发货量top5
-        $data = DB::select('SELECT `month`, city, sendweight FROM middlelogistics WHERE `month` = '.self::LASTMONTH.' ORDER BY sendweight DESC LIMIT 5');
+        $data = DB::select('SELECT `month`, city, sendweight FROM middlelogistics WHERE `month` = '.self::WULIU.' ORDER BY sendweight DESC LIMIT 5');
         return json_encode($data);
     }
 

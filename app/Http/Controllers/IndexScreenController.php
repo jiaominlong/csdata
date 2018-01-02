@@ -9,8 +9,9 @@ class IndexScreenController extends Controller
 {
     const THISYEAR = '2017';
     const LASTYEAR = '2016';
-    const THISMONTH = '11'; # 定义当前月份
-    const LASTMONTH = '10'; # 上个月
+    const THISMONTH = '12'; # 定义当前月份
+    const LASTMONTH = '11'; # 上个月
+    const TAOBAOTAMLL = '11';
     const THISTIME = '3'; #定义询指数  可以 为 1 2 3 三个值
     const CATEGORY = "'全棉休闲衬衫','全棉长裤','休闲羽绒服'";
     const MARKETCATEGORY = '\'休闲羽绒服\', \'T恤\', \'夹克\', \'棉服\', \'全棉休闲衬衫\', \'全棉长裤\', \'风衣\', \'西服\''; #市场大类销售占比
@@ -129,7 +130,7 @@ class IndexScreenController extends Controller
     public function onlinecate(){
         // 淘宝天猫各大类销售占比 V2
         $data = array();
-        $data1 = DB::select('SELECT `month`, `category`, `sale` FROM indexonlinecate WHERE `month` LIKE \'%'.self::THISMONTH.'%\' ORDER BY `category` DESC, `month` DESC');
+        $data1 = DB::select('SELECT `month`, `category`, `sale` FROM indexonlinecate WHERE `month` LIKE \'%'.self::TAOBAOTAMLL.'%\' ORDER BY `category` DESC, `month` DESC');
         for ($i=0; $i < count($data1)/2; $i++){
             $offse = $i * 2;
             $newArr = array_slice($data1, $offse, 2);
@@ -146,7 +147,7 @@ class IndexScreenController extends Controller
 
     public function onlinesaledata(){
         // 淘宝天猫各销售数据 V2
-        $data = DB::select('SELECT `month`, `category`, `sale`, `huanbi`, `tongbi` FROM indexsaledata WHERE month ='.self::THISYEAR.self::THISMONTH.' ORDER BY sale DESC');
+        $data = DB::select('SELECT `month`, `category`, `sale`, `huanbi`, `tongbi` FROM indexsaledata WHERE month ='.self::THISYEAR.self::TAOBAOTAMLL.' ORDER BY sale DESC');
         return json_encode($data);
     }
 }

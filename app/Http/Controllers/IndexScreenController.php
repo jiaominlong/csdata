@@ -15,6 +15,7 @@ class IndexScreenController extends Controller
     const THISTIME = '3'; #定义询指数  可以 为 1 2 3 三个值
     const CATEGORY = "'全棉休闲衬衫','全棉长裤','休闲羽绒服'";
     const MARKETCATEGORY = '\'休闲羽绒服\', \'T恤\', \'夹克\', \'棉服\', \'全棉休闲衬衫\', \'全棉长裤\', \'风衣\', \'西服\''; #市场大类销售占比
+    const MARKETTIME = '\'201612\', \'201712\'';
 
 
 
@@ -106,7 +107,8 @@ class IndexScreenController extends Controller
     public function marketcatesale(){
         // 市场大类销售占比
         $data = array();
-        $data1 = DB::select('SELECT `month`, `category`, `index` AS \'sale\' FROM marketcatesale WHERE `category` IN ('.self::MARKETCATEGORY.') ORDER BY category DESC, `month` DESC');
+//        $data1 = DB::select('SELECT `month`, `category`, `index` AS \'sale\' FROM marketcatesale WHERE `category` IN ('.self::MARKETCATEGORY.') ORDER BY category DESC, `month` DESC');
+        $data1 = DB::select('SELECT `month`, `category`, `index` AS \'sale\' FROM marketcatesale WHERE `month` IN ('.self::MARKETTIME.') ORDER BY category DESC, `month` DESC');
         for ($i=0; $i < count($data1)/2; $i++){
             $offse = $i * 2;
             $newArr = array_slice($data1, $offse, 2);

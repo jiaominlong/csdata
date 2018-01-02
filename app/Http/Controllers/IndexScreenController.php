@@ -10,12 +10,12 @@ class IndexScreenController extends Controller
     const THISYEAR = '2017';
     const LASTYEAR = '2016';
     const THISMONTH = '12'; # 定义当前月份
-    const LASTMONTH = '11'; # 上个月
-    const TAOBAOTAMLL = '11';
+    const TAOBAOTAMLL = '201711'; # 淘宝天猫销售数据
     const THISTIME = '3'; #定义询指数  可以 为 1 2 3 三个值
     const CATEGORY = "'全棉休闲衬衫','全棉长裤','休闲羽绒服'";
-    const MARKETCATEGORY = '\'休闲羽绒服\', \'T恤\', \'夹克\', \'棉服\', \'全棉休闲衬衫\', \'全棉长裤\', \'风衣\', \'西服\''; #市场大类销售占比
-    const MARKETTIME = '\'201612\', \'201712\'';
+//    const MARKETCATEGORY = '\'休闲羽绒服\', \'T恤\', \'夹克\', \'棉服\', \'全棉休闲衬衫\', \'全棉长裤\', \'风衣\', \'西服\''; #市场大类销售占比
+    const MARKETTIME = '\'201612\', \'201712\'';  #市场各大类袖手占比，此处应该调整。每次导入都需要调整对应的两个月份
+    const TIME_TAOTMALL = '\'201611\', \'201711\'';  #淘宝天猫各大类销售占比  这里有两个月份  每次导入都改为最新月份
 
 
 
@@ -71,17 +71,6 @@ class IndexScreenController extends Controller
     public function manjingqiindexindu(){
         // 男装行业景气指数 V2
         $data = DB::select('SELECT `month`, `index` FROM indexjingqiindu WHERE `month` LIKE \''.self::LASTYEAR.'%\' OR `month` LIKE \''.self::THISYEAR.'%\' ORDER BY `month` DESC');
-//        此处注销掉年份
-        //        $newDate = new \stdClass();
-//        $newDate->{self::THISYEAR} = array();
-//        $newDate->{self::LASTYEAR} = array();
-//        foreach ($data as $item) {
-//            if (strstr($item->month, self::THISYEAR)){
-//                array_push($newDate->{self::THISYEAR}, $item);
-//            }else{
-//                array_push($newDate->{self::LASTYEAR}, $item);
-//            }
-//        }
         return json_encode($data);
     }
 
@@ -132,7 +121,7 @@ class IndexScreenController extends Controller
     public function onlinecate(){
         // 淘宝天猫各大类销售占比 V2
         $data = array();
-        $data1 = DB::select('SELECT `month`, `category`, `sale` FROM indexonlinecate WHERE `month` LIKE \'%'.self::TAOBAOTAMLL.'%\' ORDER BY `category` DESC, `month` DESC');
+        $data1 = DB::select('SELECT `month`, `category`, `sale` FROM indexonlinecate WHERE `month` IN ('.self::TIME_TAOTMALL.') ORDER BY `category` DESC, `month` DESC');
         for ($i=0; $i < count($data1)/2; $i++){
             $offse = $i * 2;
             $newArr = array_slice($data1, $offse, 2);
@@ -149,7 +138,7 @@ class IndexScreenController extends Controller
 
     public function onlinesaledata(){
         // 淘宝天猫各销售数据 V2
-        $data = DB::select('SELECT `month`, `category`, `sale`, `huanbi`, `tongbi` FROM indexsaledata WHERE month ='.self::THISYEAR.self::TAOBAOTAMLL.' ORDER BY sale DESC');
+        $data = DB::select('SELECT `month`, `category`, `sale`, `huanbi`, `tongbi` FROM indexsaledata WHERE month ='.self::TAOBAOTAMLL.' ORDER BY sale DESC');
         return json_encode($data);
     }
 }

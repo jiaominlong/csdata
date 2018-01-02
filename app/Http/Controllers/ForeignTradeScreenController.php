@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class ForeignTradeScreenController extends Controller
 {
-    const THISMONTH = '201711';
+    const THISMONTH = '201712';
     public function index(){
         return "";
     }

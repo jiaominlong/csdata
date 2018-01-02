@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class ForeignTradeScreenController extends Controller
 {
-    const THISMONTH = '201712';
+    const THISMONTH = '201712'; # 所有的外贸数据都是本月， 除外贸汇总 和 两个指数
     public function index(){
         return "";
     }

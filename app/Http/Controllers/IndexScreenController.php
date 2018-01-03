@@ -35,7 +35,7 @@ class IndexScreenController extends Controller
     /*************男装内销价格 大类定基指数走势 V3**************/
     public function neixiaobigcateindex(){
         $data = array();
-        $dataInit = DB::select('SELECT month, category, `index` FROM indexnxbigcatetrend WHERE category in ('.self::CATEGORY.') ORDER BY `month` DESC, `category` DESC LIMIT 36');
+        $dataInit = DB::select('SELECT month, category, `index` FROM indexnxbigcatetrend ORDER BY `month` DESC, `category` DESC LIMIT 36');
         for ($i=0; $i < count($dataInit)/3; $i++){
             $offse = $i * 3;
             $newArr = array_slice($dataInit, $offse, 3);

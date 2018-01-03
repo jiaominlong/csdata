@@ -7,24 +7,25 @@ use Illuminate\Support\Facades\DB;
 
 class MiddleScreenController extends Controller
 {
-    const THISMONTH = '201712'; # 市场交易占比和市场交易额使用
-    const TOWNHOT = '201711';  # 乡镇热力图更新时间
-    const WULIU = '201710'; # 物流到货量、发货量更新时间
+    /**********  服装城数据汇总  **********/
     public function total (){
-        // 数据汇总 V2
         $data = DB::select('SELECT month, category, unit, `data` FROM middletotal ORDER BY `month` DESC LIMIT 5');
         return json_encode($data);
     }
 
+    /**********  服装城市场交易品类占比  **********/
     public function marketcate (){
         // 市场交易类别占比 V2
-        $data = DB::select('SELECT month, category, unit, `data` FROM middlemarketcate WHERE `month` = '.self::THISMONTH.' ORDER BY `data` DESC');
+        $thisyearmonth = DB::select('SELECT `month` FROM middlemarketcate ORDER BY `month` DESC LIMIT 1');
+        $data = DB::select('SELECT month, category, unit, `data` FROM middlemarketcate WHERE `month` = '.$thisyearmonth[0]->month.' ORDER BY `data` DESC');
         return json_encode($data);
     }
 
+    /**********  乡镇热力图  **********/
     public function towndata (){
         // 乡镇热力图  V2
-        $data = DB::select('SELECT `month`, `town`, `outputadd`, outputsame, taxadd, taxsame, workeradd, workersame, poweradd, powersame FROM middletowndata WHERE MONTH = '.self::TOWNHOT.' ORDER BY `town` DESC');
+        $thisyearmonth = DB::select('SELECT `month` FROM middletowndata ORDER BY `month` DESC LIMIT 1');
+        $data = DB::select('SELECT `month`, `town`, `outputadd`, outputsame, taxadd, taxsame, workeradd, workersame, poweradd, powersame FROM middletowndata WHERE MONTH = '.$thisyearmonth[0]->month.' ORDER BY `town` DESC');
         $hotmapdata = array();
         function tongbi($add, $same){
             return ($add - $same) / $same;
@@ -46,35 +47,52 @@ class MiddleScreenController extends Controller
         return json_encode($hotmapdata);
     }
 
+    /**********  服装城银行平均日资金流量  **********/
     public function bankdata (){
         // 银行资金流量 V2
         $data = DB::select('SELECT `month`, `money` FROM middlebankdata ORDER BY `month` DESC LIMIT 12');
         return json_encode($data);
     }
 
+    /**********  服装城客流、物流热力图  **********/
     public function chinamap (){
-        // 物流、客流热力图
-        $data = DB::select('SELECT middlelogistics.area , Sum(middlelogistics.sendweight) AS \'sendweight\', Sum(middlelogistics.arriveweight) AS \'arriveweight\', (SELECT SUM(count) from middlecustomer mc where mc.area =middlelogistics.area GROUP BY mc.area ) AS \'customer\'
-FROM middlelogistics GROUP BY middlelogistics.area ORDER BY middlelogistics.area DESC
-');
-        return json_encode($data);
+        /* 为保证数据一致性，物流数据更新比较晚，所以时间依物流表中最新时间为准 */
+        // 从物流表里获取物流最新数据的时间
+        $time = DB::select('SELECT `month` FROM middlelogistics ORDER BY `month` DESC LIMIT 1')[0]->month;
+        // 获取最新物流数据
+        $logistics = DB::select('SELECT `month`, `area`, SUM(sendweight) AS sendweight, SUM(arriveweight) AS arriveweight FROM middlelogistics WHERE `month` = '.$time.' GROUP BY area ORDER BY `area` DESC');
+        // 获取对应物流时间的客流数据
+        $customer = DB::select('SELECT `area`, SUM(count) AS customer1 FROM middlecustomer WHERE `month` = '.$time.' GROUP BY `area`');
+        // 组成新的数组进行返回
+        foreach ($logistics as $log) {
+            for ($i = 0; $i<count($customer); $i++){
+                if ($log->area == $customer[$i]->area) {
+                    $log->customer = $customer[$i]->customer1;
+                }
+            }
+        }
+        return json_encode($logistics);
     }
 
-    public function arrivelogistics (){
-        // 物流到货量
-        $data = DB::select('SELECT `month`, city, arriveweight FROM middlelogistics WHERE `month` = '.self::WULIU.' ORDER BY arriveweight DESC LIMIT 5');
-        return json_encode($data);
-    }
-
+    /**********  服装城物流发货量  **********/
     public function sendlogistics (){
-        // 物流发货量top5
-        $data = DB::select('SELECT `month`, city, sendweight FROM middlelogistics WHERE `month` = '.self::WULIU.' ORDER BY sendweight DESC LIMIT 5');
+        $thisyearmonth = DB::select('SELECT `month` FROM middlelogistics ORDER BY `month` DESC LIMIT 1');
+        $data = DB::select('SELECT `month`, city, sendweight FROM middlelogistics WHERE `month` = '.$thisyearmonth[0]->month.' ORDER BY sendweight DESC LIMIT 5');
         return json_encode($data);
     }
 
+    /**********  服装城物流到达量  **********/
+    public function arrivelogistics (){
+        $thisyearmonth = DB::select('SELECT `month` FROM middlelogistics ORDER BY `month` DESC LIMIT 1');
+        $data = DB::select('SELECT `month`, city, arriveweight FROM middlelogistics WHERE `month` = '.$thisyearmonth[0]->month.' ORDER BY arriveweight DESC LIMIT 5');
+        return json_encode($data);
+    }
+
+    /**********  服装城市场交易数据  **********/
     public function marketsale (){
         // 市场交易TOP15
-        $data = DB::select('SELECT `month`, `market`, `money` FROM middlemarketdata WHERE `month` = '.self::THISMONTH.' ORDER BY `money` DESC');
+        $thisyearmonth = DB::select('SELECT `month` FROM middlemarketdata ORDER BY `month` DESC LIMIT 1');
+        $data = DB::select('SELECT `month`, `market`, `money` FROM middlemarketdata WHERE `month` = '.$thisyearmonth[0]->month.' ORDER BY `money` DESC');
         return json_encode($data);
     }
 }

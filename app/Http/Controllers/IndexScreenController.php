@@ -7,18 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class IndexScreenController extends Controller
 {
-    const THISYEAR = '2017';
-    const LASTYEAR = '2016';
-    const THISMONTH = '12'; # 定义当前月份
-    const TAOBAOTAMLL = '201711'; # 淘宝天猫销售数据
-    const THISTIME = '3'; #定义询指数  可以 为 1 2 3 三个值
-    const CATEGORY = "'全棉休闲衬衫','全棉长裤','休闲羽绒服'";
-//    const MARKETCATEGORY = '\'休闲羽绒服\', \'T恤\', \'夹克\', \'棉服\', \'全棉休闲衬衫\', \'全棉长裤\', \'风衣\', \'西服\''; #市场大类销售占比
-    const MARKETTIME = '\'201612\', \'201712\'';  #市场各大类袖手占比，此处应该调整。每次导入都需要调整对应的两个月份
-    const TIME_TAOTMALL = '\'201611\', \'201711\'';  #淘宝天猫各大类销售占比  这里有两个月份  每次导入都改为最新月份
-
-
-
 //    排序函数
     function newSort($arr) {
         $flag = array();
@@ -28,23 +16,26 @@ class IndexScreenController extends Controller
         array_multisort($flag, SORT_DESC, $arr);
         return $arr;
     }
-    //
+
+    /*************男装内销价格指数 V3**************/
     public function neixiaoprice(){
-        // 男装内销价格指数 V2
-        $data = DB::select('SELECT `month`, times, category, zengsu, huanbi, dingji, tongbi FROM indexnxprice WHERE month = '.self::THISYEAR.self::THISMONTH.' AND times = '.self::THISTIME);
+        // 获取数据库中最新的月份和旬数
+        $lasttime = DB::select('SELECT `month`, `times` FROM indexnxprice ORDER BY `month` DESC , `times` DESC LIMIT 1');
+        // 使用最新的月份和旬  进行查询
+        $data = DB::select('SELECT `month`, times, category, zengsu, huanbi, dingji, tongbi FROM indexnxprice WHERE month = '.$lasttime[0]->month.' AND times = '.$lasttime[0]->times);
         return json_encode($data);
     }
-
+    /*************男装内销价格总指数走势 V3**************/
     public function neixiaopricetotalindex(){
-        // 男装内销价格总指数走势 V2
+        // 依照月份从打到小获取最新的12个值
         $data = DB::select('SELECT month, dingji, tongbi, huanbi FROM indexnxpricetotaltrend ORDER BY month DESC LIMIT 12');
         return json_encode($data);
     }
 
+    /*************男装内销价格 大类定基指数走势 V3**************/
     public function neixiaobigcateindex(){
-        // 男装内销价格总指数走势 V2
         $data = array();
-        $dataInit = DB::select('SELECT month, category, `index` FROM indexnxbigcatetrend WHERE category in ('.self::CATEGORY.') ORDER BY `month` DESC, `category` DESC');
+        $dataInit = DB::select('SELECT month, category, `index` FROM indexnxbigcatetrend WHERE category in ('.self::CATEGORY.') ORDER BY `month` DESC, `category` DESC LIMIT 36');
         for ($i=0; $i < count($dataInit)/3; $i++){
             $offse = $i * 3;
             $newArr = array_slice($dataInit, $offse, 3);
@@ -62,22 +53,31 @@ class IndexScreenController extends Controller
         return json_encode($data);
     }
 
+    /*************男装景气指数 V3**************/
     public function manjingqiindex(){
-        // 男装景气指数 V2
-        $data = DB::select('SELECT month, category, `index` FROM indexjingqiindex WHERE month = '.self::THISYEAR.self::THISMONTH.' LIMIT 5');
+        // 获取最新时间
+        $lastttime = DB::select('SELECT `month` FROM indexjingqiindex ORDER BY `month` DESC LIMIT 1');
+        // 使用获取的最新时间 进行查询
+        $data = DB::select('SELECT month, category, `index` FROM indexjingqiindex WHERE month = '.$lastttime[0]->month.' LIMIT 5');
         return json_encode($data);
     }
 
+    /**************男装行业景气指数走势 V3**************/
     public function manjingqiindexindu(){
-        // 男装行业景气指数 V2
-        $data = DB::select('SELECT `month`, `index` FROM indexjingqiindu WHERE `month` LIKE \''.self::LASTYEAR.'%\' OR `month` LIKE \''.self::THISYEAR.'%\' ORDER BY `month` DESC');
+        //获取最新的年月
+        $lasttime = DB::select('SELECT `month` FROM indexjingqiindu ORDER BY `month` DESC LIMIT 1');
+        // 获取最新年
+        $thisyear = substr($lasttime[0]->month, 0, 4);
+        // 计算得到上一年
+        $lastyear = (string)((int)$thisyear - 1);
+        $data = DB::select('SELECT `month`, `index` FROM indexjingqiindu WHERE `month` LIKE \''.$lastyear.'%\' OR `month` LIKE \''.$thisyear.'%\' ORDER BY `month` DESC');
         return json_encode($data);
     }
 
+    /**************男装分类景气指数走势 V3**************/
     public function manjingqiindexcate(){
-        // 男装类别景气指数 V2
         $data = array();
-        $data1 = DB::select('SELECT `month`, `category`, `index` FROM indexjingqicate WHERE category in (\'生产\',\'市场\') ORDER BY `month` DESC, `category` DESC');
+        $data1 = DB::select('SELECT `month`, `category`, `index` FROM indexjingqicate WHERE category in (\'生产\',\'市场\') ORDER BY `month` DESC, `category` DESC LIMIT 24');
         for ($i=0; $i < count($data1)/2; $i++){
             $offse = $i * 2;
             $newArr = array_slice($data1, $offse, 2);
@@ -92,12 +92,22 @@ class IndexScreenController extends Controller
         }
         return json_encode($data);
     }
-
+    /**************男装市场大类销售占比 V3**************/
     public function marketcatesale(){
-        // 市场大类销售占比
         $data = array();
-//        $data1 = DB::select('SELECT `month`, `category`, `index` AS \'sale\' FROM marketcatesale WHERE `category` IN ('.self::MARKETCATEGORY.') ORDER BY category DESC, `month` DESC');
-        $data1 = DB::select('SELECT `month`, `category`, `index` AS \'sale\' FROM marketcatesale WHERE `month` IN ('.self::MARKETTIME.') ORDER BY category DESC, `month` DESC');
+        // 查出最新的年月
+        $lasttime = DB::select('SELECT `month` FROM marketcatesale ORDER BY `month` DESC LIMIT 1');
+        // 最新年月
+        $thisyearmonth = $lasttime[0]->month;
+        // 最新年份
+        $findnum = substr($thisyearmonth, 0, 4);
+        // 上一年分
+        $replacenum = (string)((int)$findnum - 1);
+        // 上一年分对应的月
+        $lastyearmonth = str_replace($findnum, $replacenum, $thisyearmonth);
+        // 组合成时间
+        $alltime = $thisyearmonth.','.$lastyearmonth;
+        $data1 = DB::select('SELECT `month`, `category`, `index` AS \'sale\' FROM marketcatesale WHERE `month` IN ('.$alltime.') ORDER BY category DESC, `month` DESC');
         for ($i=0; $i < count($data1)/2; $i++){
             $offse = $i * 2;
             $newArr = array_slice($data1, $offse, 2);
@@ -112,16 +122,35 @@ class IndexScreenController extends Controller
         return json_encode($this->newSort($data));
     }
 
+    /**************男装淘宝、天猫销售数据 V3**************/
+    public function onlinesaledata(){
+        $thisyear = DB::select('SELECT `month` FROM indexsaledata ORDER BY `month` LIMIT 1');
+        $data = DB::select('SELECT `month`, `category`, `sale`, `huanbi`, `tongbi` FROM indexsaledata WHERE month ='.$thisyear[0]->month.' ORDER BY sale DESC');
+        return json_encode($data);
+    }
+
+    /**************淘宝、天猫交易情况 V3**************/
     public function onlinesale(){
-        // 市场交易额区县V2
         $data = DB::select('SELECT `month`, `sale`, `salecount` FROM indexonlinesale ORDER BY `month` DESC LIMIT 12');
         return json_encode($data);
     }
 
+    /**************男装淘宝、天猫各大类销售占比 V3**************/
     public function onlinecate(){
-        // 淘宝天猫各大类销售占比 V2
         $data = array();
-        $data1 = DB::select('SELECT `month`, `category`, `sale` FROM indexonlinecate WHERE `month` IN ('.self::TIME_TAOTMALL.') ORDER BY `category` DESC, `month` DESC');
+        // 查出最新的年月
+        $lasttime = DB::select('SELECT `month` FROM indexonlinecate ORDER BY `month` DESC LIMIT 1');
+        // 最新年月
+        $thisyearmonth = $lasttime[0]->month;
+        // 最新年份
+        $findnum = substr($thisyearmonth, 0, 4);
+        // 上一年分
+        $replacenum = (string)((int)$findnum - 1);
+        // 上一年分对应的月
+        $lastyearmonth = str_replace($findnum, $replacenum, $thisyearmonth);
+        // 组合成时间
+        $alltime = $thisyearmonth.','.$lastyearmonth;
+        $data1 = DB::select('SELECT `month`, `category`, `sale` FROM indexonlinecate WHERE `month` IN ('.$alltime.') ORDER BY `category` DESC, `month` DESC');
         for ($i=0; $i < count($data1)/2; $i++){
             $offse = $i * 2;
             $newArr = array_slice($data1, $offse, 2);
@@ -134,11 +163,5 @@ class IndexScreenController extends Controller
             array_push($data, $tempArr);
         }
         return json_encode($this->newSort($data));
-    }
-
-    public function onlinesaledata(){
-        // 淘宝天猫各销售数据 V2
-        $data = DB::select('SELECT `month`, `category`, `sale`, `huanbi`, `tongbi` FROM indexsaledata WHERE month ='.self::TAOBAOTAMLL.' ORDER BY sale DESC');
-        return json_encode($data);
     }
 }

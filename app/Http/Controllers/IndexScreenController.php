@@ -124,7 +124,7 @@ class IndexScreenController extends Controller
 
     /**************男装淘宝、天猫销售数据 V3**************/
     public function onlinesaledata(){
-        $thisyear = DB::select('SELECT `month` FROM indexsaledata ORDER BY `month` LIMIT 1');
+        $thisyear = DB::select('SELECT `month` FROM indexsaledata ORDER BY `month` DESC LIMIT 1');
         $data = DB::select('SELECT `month`, `category`, `sale`, `huanbi`, `tongbi` FROM indexsaledata WHERE month ='.$thisyear[0]->month.' ORDER BY sale DESC');
         return json_encode($data);
     }
